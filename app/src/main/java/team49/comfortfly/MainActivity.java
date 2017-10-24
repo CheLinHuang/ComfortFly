@@ -21,6 +21,12 @@ import com.google.api.services.qpxExpress.model.TripOptionsRequest;
 import com.google.api.services.qpxExpress.model.TripsSearchRequest;
 import com.google.api.services.qpxExpress.model.TripsSearchResponse;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     EditText Destination;
     EditText Dt;
     Button Search;
-    ListView listView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,88 +48,25 @@ public class MainActivity extends AppCompatActivity {
         Destination = (EditText) findViewById(R.id.editText2);
         Dt = (EditText) findViewById(R.id.editText3);
         Search = (Button) findViewById(R.id.button2);
-        listView = (ListView) findViewById(R.id.listView1);
 
-        Search.setOnClickListener(new View.OnClickListener() {
+
+        Thread thread = new Thread(new Runnable() {
+
             @Override
-            public void onClick(View view) {
-                SliceInput slice = new SliceInput();
-                slice.setOrigin(Origin.getText().toString());
-                slice.setDestination(Destination.getText().toString());
-                slice.setDate(Dt.getText().toString());
+            public void run() {
+                try {
 
-                AirlineReservation a = new AirlineReservation();
-                a.execute(slice);
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
         });
+        thread.start();
 
-    }
-
-    class AirlineReservation extends AsyncTask<Object, Boolean, Boolean> {
-
-        private static final String APPLICATION_NAME = "MyFlightApplication";
-        /**
-         * Global instance of the JSON factory.
-         */
-        private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-        /**
-         * @param args
-         */
-
-        List<TripOption> tripResults;
-        StringBuilder sb = new StringBuilder();
-        /**
-         * Global instance of the HTTP transport.
-         */
-        private HttpTransport httpTransport;
-
-        @Override
-        protected Boolean doInBackground(Object... params) {
-
-            SliceInput slice = (SliceInput) params[0];
-            slice.setMaxStops(1);
-
-            try {
-                //httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-                httpTransport = new ApacheHttpTransport();
-
-                PassengerCounts passengers = new PassengerCounts();
-                passengers.setAdultCount(1);
-
-                List<SliceInput> slices = new ArrayList<SliceInput>();
-                slices.add(slice);
-
-                TripOptionsRequest request = new TripOptionsRequest();
-                request.setSolutions(10);
-                request.setPassengers(passengers);
-                request.setSlice(slices);
-
-                TripsSearchRequest parameters = new TripsSearchRequest();
-                parameters.setRequest(request);
-                QPXExpress qpXExpress = new QPXExpress.Builder(httpTransport, JSON_FACTORY, null).setApplicationName(APPLICATION_NAME)
-                        .setGoogleClientRequestInitializer(new QPXExpressRequestInitializer(Credential.API_KEY)).build();
-
-                TripsSearchResponse list = qpXExpress.trips().search(parameters).execute();
-                this.tripResults = list.getTrips().getTripOption();
-
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-                return false;
-            } catch (Throwable t) {
-                t.printStackTrace();
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            if (success) {
-                SearchResultAdapter s = new SearchResultAdapter(getApplicationContext(), tripResults);
-                listView.setAdapter(s);
-            }
-        }
     }
 }
 

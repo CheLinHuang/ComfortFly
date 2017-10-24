@@ -29,12 +29,6 @@ public class AirlineReservation extends AsyncTask<Object, Boolean, Boolean> {
      * @param args
      */
 
-    TextView result;
-
-    AirlineReservation(TextView result) {
-        this.result = result;
-    }
-
     private static final String APPLICATION_NAME = "MyFlightApplication";
 
     /** Global instance of the HTTP transport. */
@@ -155,7 +149,5 @@ public class AirlineReservation extends AsyncTask<Object, Boolean, Boolean> {
 
     @Override
     protected void onPostExecute(final Boolean success) {
-        if (success)
-            result.setText(sb.toString());
     }
 }
