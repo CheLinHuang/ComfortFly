@@ -18,23 +18,23 @@
 
         <!--editText1-->
         <!--<EditText-->
-            <!--android:id="@+id/place_autocomplete_fragment"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
-            <!--android:ems="10"-->
-            <!--android:hint="Departure Airport"-->
-            <!--android:inputType="text" />-->
+        <!--android:id="@+id/place_autocomplete_fragment"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Departure Airport"-->
+        <!--android:inputType="text" />-->
 
         <!--<EditText-->
-            <!--android:id="@+id/editText2"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:ems="10"-->
-            <!--android:hint="Arrival Airport"-->
-            <!--android:inputType="text" />-->
+        <!--android:id="@+id/editText2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Arrival Airport"-->
+        <!--android:inputType="text" />-->
 
         <fragment
             android:id="@+id/origin"
@@ -64,6 +64,7 @@
         android:layout_below="@+id/LY"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="16dp">
+
         <CalendarView
             android:id="@+id/startDate"
             android:layout_width="wrap_content"
@@ -87,15 +88,15 @@
             android:inputType="date" />
     </LinearLayout>
     <!--<EditText-->
-        <!--android:id="@+id/editText3"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/LY"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_weight="1"-->
-        <!--android:ems="10"-->
-        <!--android:hint="2017-10-12"-->
-        <!--android:inputType="date" />-->
+    <!--android:id="@+id/editText3"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/LY"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_weight="1"-->
+    <!--android:ems="10"-->
+    <!--android:hint="2017-10-12"-->
+    <!--android:inputType="date" />-->
 
     <Button
         android:id="@+id/button2"

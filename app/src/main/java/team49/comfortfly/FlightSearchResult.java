@@ -2,8 +2,8 @@ package team49.comfortfly;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.google.api.client.http.HttpTransport;
@@ -87,7 +87,8 @@ public class FlightSearchResult extends AppCompatActivity {
                 HttpResponse response = httpclient.execute(httpget);
 
                 if (response.getStatusLine().getStatusCode() == 200) {
-                    originAirport = EntityUtils.toString(response.getEntity()).split("\"")[8];
+                    String responseString = EntityUtils.toString(response.getEntity());
+                    originAirport = responseString.split("\"")[7];
                 } else {
                     return false;
                 }
@@ -97,7 +98,8 @@ public class FlightSearchResult extends AppCompatActivity {
                         "/" + destinationLatLng.split(",")[1]);
                 response = httpclient.execute(httpget);
                 if (response.getStatusLine().getStatusCode() == 200) {
-                    destinationAirport = EntityUtils.toString(response.getEntity()).split("\"")[8];
+                    String responseString = EntityUtils.toString(response.getEntity());
+                    destinationAirport = responseString.split("\"")[7];
                 } else {
                     return false;
                 }
