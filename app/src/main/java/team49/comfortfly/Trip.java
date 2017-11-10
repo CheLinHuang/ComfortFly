@@ -16,9 +16,9 @@ public class Trip {
         FRID = "!";
         Origin = "TPE";
         Destination = "ORD";
-        DepartureDate = "10/25";
+        DepartureDate = "2017-10-25";
         DepartureTime = "11:00";
-        ArrivalDate = "11/15";
+        ArrivalDate = "2017-10-29";
         ArrivalTime = "23:00";
         Airline = "AA";
         FlightNumber = "666";

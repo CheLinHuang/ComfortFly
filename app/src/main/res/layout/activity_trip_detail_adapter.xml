@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="50dp"
-        android:text="11/25"
+        android:text="2017-10-25"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />
 
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="120dp"
+        android:layout_marginLeft="170dp"
         android:text="11:00AM"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textViewTripArrivalAirport"
         android:layout_marginLeft="50dp"
-        android:text="11/25"
+        android:text="2017-11-25"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />
 
@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textViewTripArrivalAirport"
-        android:layout_marginLeft="120dp"
+        android:layout_marginLeft="170dp"
         android:text="11:00AM"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />

@@ -67,7 +67,7 @@ public class UpdateItinerary extends AppCompatActivity {
         airlineInput = intent.getExtras().getString("airline");
         flightNumberInput = intent.getExtras().getString("flightNumber");
 
-        if( departDateInput != 0L) StartDateView.setDate(departDateInput);
+        if (departDateInput != 0L) StartDateView.setDate(departDateInput);
         StartDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -78,7 +78,7 @@ public class UpdateItinerary extends AppCompatActivity {
             }
         });
 
-        if( departDateInput != 0L) StartDateView.setDate(departDateInput);
+        if (departDateInput != 0L) StartDateView.setDate(departDateInput);
         ReturnDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -127,7 +127,7 @@ public class UpdateItinerary extends AppCompatActivity {
 
         PlaceAutocompleteFragment Origin = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.origin);
-        if( originInput == "")
+        if (originInput == "")
             Origin.setHint("Departure");
         else {
             Origin.setText(originInput);
@@ -152,7 +152,7 @@ public class UpdateItinerary extends AppCompatActivity {
         PlaceAutocompleteFragment Destination = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.destination);
 
-        if( originInput == "")
+        if (originInput == "")
             Destination.setHint("Destination");
         else {
             Destination.setText(destinationInput);
@@ -176,7 +176,7 @@ public class UpdateItinerary extends AppCompatActivity {
         });
 
         final EditText startTime = (EditText) findViewById(R.id.startTime);
-        if( departTimeInput != "") startTime.setText(departTimeInput);
+        if (departTimeInput != "") startTime.setText(departTimeInput);
         startTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -190,7 +190,7 @@ public class UpdateItinerary extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(UpdateItinerary.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        startTime.setText( selectedHour + ":" + selectedMinute);
+                        startTime.setText(selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select Time");
@@ -199,7 +199,7 @@ public class UpdateItinerary extends AppCompatActivity {
             }
         });
         final EditText endTime = (EditText) findViewById(R.id.endTime);
-        if( returnTimeInput != "") endTime.setText(returnTimeInput);
+        if (returnTimeInput != "") endTime.setText(returnTimeInput);
         endTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -213,7 +213,7 @@ public class UpdateItinerary extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(UpdateItinerary.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        endTime.setText( selectedHour + ":" + (selectedMinute < 10 ? "0"+selectedMinute:selectedMinute));
+                        endTime.setText(selectedHour + ":" + (selectedMinute < 10 ? "0" + selectedMinute : selectedMinute));
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select Time");
@@ -225,10 +225,10 @@ public class UpdateItinerary extends AppCompatActivity {
         airline = (EditText) findViewById(R.id.airline);
         flightNumber = (EditText) findViewById(R.id.flightNumber);
 
-        if(airlineInput != "") {
+        if (airlineInput != "") {
             airline.setText(airlineInput);
         }
-        if(flightNumberInput != "") {
+        if (flightNumberInput != "") {
             flightNumber.setText(flightNumberInput);
         }
     }

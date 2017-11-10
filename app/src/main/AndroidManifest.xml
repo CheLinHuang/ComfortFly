@@ -19,14 +19,10 @@
         </activity>
         <activity android:name=".FlightSearch" />
         <activity android:name=".FlightSearchResult" />
-
+        <activity android:name=".TripManagement" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAi1lm1rHJ4Nko9p7uQx8n9-nAul1xxlu0" />
-
-        <activity android:name=".FlightSearch" />
-        <activity android:name=".TripDetailAdapter"></activity>
-
         <activity android:name=".UpdateItinerary" />
     </application>
 
