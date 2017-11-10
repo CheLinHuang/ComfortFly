@@ -1,5 +1,6 @@
 package team49.comfortfly;
 
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -19,7 +24,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class FlightSearch extends AppCompatActivity {
+public class UpdateItinerary extends AppCompatActivity {
 
     String curDate;
     String OriginLatLng;
@@ -30,12 +35,12 @@ public class FlightSearch extends AppCompatActivity {
     CalendarView ReturnDateView;
     Button Search;
     ListView listView;
-    private static final String TAG = "FlightSearch";
+    private static final String TAG = "UpdateItinerary";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flight_search);
+        setContentView(R.layout.activity_update_itinerary);
 
         StartDateView = (CalendarView) findViewById(R.id.startDate);
         ReturnDateView = (CalendarView) findViewById(R.id.returnDate);
@@ -93,12 +98,12 @@ public class FlightSearch extends AppCompatActivity {
                     System.out.println((DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
                     System.out.println(StartDate);
                     System.out.println(ReturnDate);
-                    Intent i = new Intent(FlightSearch.this, FlightSearchResult.class);
-                    i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
-                    i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
-                    i.putExtra("departDate", StartDate);
-                    i.putExtra("returnDate", ReturnDate);
-                    startActivity(i);
+//                    Intent i = new Intent(UpdateItinerary.this, FlightSearchResult.class);
+//                    i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
+//                    i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
+//                    i.putExtra("departDate", StartDate);
+//                    i.putExtra("returnDate", ReturnDate);
+//                    startActivity(i);
                 }
             }
         });
@@ -141,6 +146,53 @@ public class FlightSearch extends AppCompatActivity {
             public void onError(Status status) {
                 // TODO: Handle the error.
                 Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+        final EditText startTime = (EditText) findViewById(R.id.startTime);
+
+        startTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(UpdateItinerary.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        startTime.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
+            }
+        });
+        final EditText endTime = (EditText) findViewById(R.id.endTime);
+
+        endTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(UpdateItinerary.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        endTime.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
             }
         });
     }

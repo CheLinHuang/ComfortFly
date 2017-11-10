@@ -10,18 +10,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FlightSearch">
+        <activity android:name=".Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FlightSearchResult"></activity>
+        <activity android:name=".FlightSearch" />
+        <activity android:name=".FlightSearchResult" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAi1lm1rHJ4Nko9p7uQx8n9-nAul1xxlu0" />
+
+        <activity android:name=".UpdateItinerary" />
     </application>
 
 </manifest>
