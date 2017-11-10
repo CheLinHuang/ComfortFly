@@ -31,7 +31,16 @@ public class Home extends AppCompatActivity {
         Show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println(System.currentTimeMillis());
                 Intent i = new Intent(Home.this, UpdateItinerary.class);
+                i.putExtra("origin", "CMI");
+                i.putExtra("destination", "ORD");
+                i.putExtra("departDate", System.currentTimeMillis());
+                i.putExtra("returnDate", System.currentTimeMillis());
+                i.putExtra("departTime", "11:00AM");
+                i.putExtra("returnTime", "12:00PM");
+                i.putExtra("airline", "AA");
+                i.putExtra("flightNumber", "1234");
                 startActivity(i);
             }
         });

@@ -16,26 +16,6 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <!--editText1-->
-        <!--<EditText-->
-        <!--android:id="@+id/place_autocomplete_fragment"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
-        <!--android:ems="10"-->
-        <!--android:hint="Departure Airport"-->
-        <!--android:inputType="text" />-->
-
-        <!--<EditText-->
-        <!--android:id="@+id/editText2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:ems="10"-->
-        <!--android:hint="Arrival Airport"-->
-        <!--android:inputType="text" />-->
-
         <fragment
             android:id="@+id/origin"
             android:layout_width="wrap_content"
