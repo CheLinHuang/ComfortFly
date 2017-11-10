@@ -1,5 +1,6 @@
 package team49.comfortfly;
 
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TimePicker;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -19,7 +22,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class FlightSearch extends AppCompatActivity {
+public class UpdateItinerary extends AppCompatActivity {
 
     String curDate;
     String OriginLatLng;
@@ -30,18 +33,41 @@ public class FlightSearch extends AppCompatActivity {
     CalendarView ReturnDateView;
     Button Search;
     ListView listView;
-    private static final String TAG = "FlightSearch";
+    EditText airline;
+    EditText flightNumber;
+
+    String originInput;
+    String destinationInput;
+    Long departDateInput;
+    Long returnDateInput;
+    String departTimeInput;
+    String returnTimeInput;
+    String airlineInput;
+    String flightNumberInput;
+
+    private static final String TAG = "UpdateItinerary";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flight_search);
+        setContentView(R.layout.activity_update_itinerary);
 
         StartDateView = (CalendarView) findViewById(R.id.startDate);
         ReturnDateView = (CalendarView) findViewById(R.id.returnDate);
         Search = (Button) findViewById(R.id.button2);
         listView = (ListView) findViewById(R.id.listView1);
 
+        Intent intent = getIntent();
+        originInput = intent.getExtras().getString("origin");
+        destinationInput = intent.getExtras().getString("destination");
+        departDateInput = intent.getExtras().getLong("departDate");
+        returnDateInput = intent.getExtras().getLong("returnDate");
+        departTimeInput = intent.getExtras().getString("departTime");
+        returnTimeInput = intent.getExtras().getString("returnTime");
+        airlineInput = intent.getExtras().getString("airline");
+        flightNumberInput = intent.getExtras().getString("flightNumber");
+
+        if( departDateInput != 0L) StartDateView.setDate(departDateInput);
         StartDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -52,6 +78,7 @@ public class FlightSearch extends AppCompatActivity {
             }
         });
 
+        if( departDateInput != 0L) StartDateView.setDate(departDateInput);
         ReturnDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -88,24 +115,23 @@ public class FlightSearch extends AppCompatActivity {
                         || StartDate.compareTo(curDate) == -1 || ReturnDate.compareTo(StartDate) == -1) {
                     alert11.show();
                 } else {
-
-                    System.out.println((OriginLatLng.split("\\(")[1]).split("\\)")[0]);
-                    System.out.println((DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
-                    System.out.println(StartDate);
-                    System.out.println(ReturnDate);
-                    Intent i = new Intent(FlightSearch.this, FlightSearchResult.class);
-                    i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
-                    i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
-                    i.putExtra("departDate", StartDate);
-                    i.putExtra("returnDate", ReturnDate);
-                    startActivity(i);
+//                    Intent i = new Intent(UpdateItinerary.this, FlightSearchResult.class);
+//                    i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
+//                    i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
+//                    i.putExtra("departDate", StartDate);
+//                    i.putExtra("returnDate", ReturnDate);
+//                    startActivity(i);
                 }
             }
         });
 
         PlaceAutocompleteFragment Origin = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.origin);
-        Origin.setHint("Departure");
+        if( originInput == "")
+            Origin.setHint("Departure");
+        else {
+            Origin.setText(originInput);
+        }
 
         Origin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -125,7 +151,12 @@ public class FlightSearch extends AppCompatActivity {
 
         PlaceAutocompleteFragment Destination = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.destination);
-        Destination.setHint("Destination");
+
+        if( originInput == "")
+            Destination.setHint("Destination");
+        else {
+            Destination.setText(destinationInput);
+        }
 
         Destination.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -143,6 +174,63 @@ public class FlightSearch extends AppCompatActivity {
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
+
+        final EditText startTime = (EditText) findViewById(R.id.startTime);
+        if( departTimeInput != "") startTime.setText(departTimeInput);
+        startTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(UpdateItinerary.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        startTime.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
+            }
+        });
+        final EditText endTime = (EditText) findViewById(R.id.endTime);
+        if( returnTimeInput != "") endTime.setText(returnTimeInput);
+        endTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(UpdateItinerary.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        endTime.setText( selectedHour + ":" + (selectedMinute < 10 ? "0"+selectedMinute:selectedMinute));
+                    }
+                }, hour, minute, true);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
+            }
+        });
+
+        airline = (EditText) findViewById(R.id.airline);
+        flightNumber = (EditText) findViewById(R.id.flightNumber);
+
+        if(airlineInput != "") {
+            airline.setText(airlineInput);
+        }
+        if(flightNumberInput != "") {
+            flightNumber.setText(flightNumberInput);
+        }
     }
 }
 

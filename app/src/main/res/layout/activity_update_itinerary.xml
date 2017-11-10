@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/activity_margin"
-    tools:context="team49.comfortfly.FlightSearch"
+    tools:context="team49.comfortfly.UpdateItinerary"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 
@@ -67,25 +67,73 @@
             android:hint="2017-10-12"
             android:inputType="date" />
     </LinearLayout>
-    <!--<EditText-->
-    <!--android:id="@+id/editText3"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/LY"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:layout_weight="1"-->
-    <!--android:ems="10"-->
-    <!--android:hint="2017-10-12"-->
-    <!--android:inputType="date" />-->
+
+    <LinearLayout
+        android:id="@+id/LY3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/LY2"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <EditText
+            android:id="@+id/startTime"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="Start Time"
+            android:layout_weight="1"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:focusable="false"/>
+        <EditText
+            android:id="@+id/endTime"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="End Time"
+            android:layout_weight="1"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:focusable="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LY4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/LY3"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <EditText
+        android:id="@+id/airline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Airline"
+        android:inputType="text" />
+
+        <EditText
+        android:id="@+id/flightNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Flight#"
+        android:inputType="text" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/LY2"
+        android:layout_below="@+id/LY4"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="13dp"
-        android:text="Search" />
+        android:text="Update" />
 
     <ListView
         android:id="@+id/listView1"
