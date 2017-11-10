@@ -60,7 +60,7 @@ public class TripDetailAdapter extends ArrayAdapter<Trip> {
 
         holder.textViewTripDepartAirport.setText(result.Origin);
         holder.textViewTripArrivalAirport.setText(result.Destination);
-        holder.textViewTripDepartDate.setText(result.DepartureTime);
+        holder.textViewTripDepartDate.setText(result.DepartureDate);
         holder.textViewTripDepartTime.setText(result.DepartureTime);
         holder.textViewTripArrivalDate.setText(result.ArrivalDate);
         holder.textViewTripArrivalTime.setText(result.ArrivalTime);

@@ -19,8 +19,10 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class UpdateItinerary extends AppCompatActivity {
 
@@ -38,8 +40,8 @@ public class UpdateItinerary extends AppCompatActivity {
 
     String originInput;
     String destinationInput;
-    Long departDateInput;
-    Long returnDateInput;
+    String departDateInput;
+    String returnDateInput;
     String departTimeInput;
     String returnTimeInput;
     String airlineInput;
@@ -60,14 +62,23 @@ public class UpdateItinerary extends AppCompatActivity {
         Intent intent = getIntent();
         originInput = intent.getExtras().getString("origin");
         destinationInput = intent.getExtras().getString("destination");
-        departDateInput = intent.getExtras().getLong("departDate");
-        returnDateInput = intent.getExtras().getLong("returnDate");
+        departDateInput = intent.getExtras().getString("departDate");
+        returnDateInput = intent.getExtras().getString("returnDate");
         departTimeInput = intent.getExtras().getString("departTime");
         returnTimeInput = intent.getExtras().getString("returnTime");
         airlineInput = intent.getExtras().getString("airline");
         flightNumberInput = intent.getExtras().getString("flightNumber");
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
-        if (departDateInput != 0L) StartDateView.setDate(departDateInput);
+        if (departDateInput != "") {
+            try {
+                Date d = f.parse(departDateInput);
+                long milliseconds = d.getTime();
+                StartDateView.setDate(milliseconds);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
         StartDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -78,7 +89,15 @@ public class UpdateItinerary extends AppCompatActivity {
             }
         });
 
-        if (departDateInput != 0L) StartDateView.setDate(departDateInput);
+        if (returnDateInput != "") {
+            try {
+                Date d = f.parse(returnDateInput);
+                long milliseconds = d.getTime();
+                ReturnDateView.setDate(milliseconds);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
         ReturnDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -127,8 +146,10 @@ public class UpdateItinerary extends AppCompatActivity {
 
         PlaceAutocompleteFragment Origin = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.origin);
-        if (originInput == "")
+        if (originInput.equals("")){
             Origin.setHint("Departure");
+            Search.setText("Add");
+        }
         else {
             Origin.setText(originInput);
         }
@@ -152,7 +173,7 @@ public class UpdateItinerary extends AppCompatActivity {
         PlaceAutocompleteFragment Destination = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.destination);
 
-        if (originInput == "")
+        if (destinationInput.equals(""))
             Destination.setHint("Destination");
         else {
             Destination.setText(destinationInput);

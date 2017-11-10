@@ -16,7 +16,7 @@ public class Trip {
         FRID = "!";
         Origin = "TPE";
         Destination = "ORD";
-        DepartureDate = "2017-10-25";
+        DepartureDate = "2013-10-25";
         DepartureTime = "11:00";
         ArrivalDate = "2017-10-29";
         ArrivalTime = "23:00";
