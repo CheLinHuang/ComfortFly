@@ -25,7 +25,16 @@ public class TripManagement extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent i = new Intent(this, UpdateItinerary.class);
+                i.putExtra("origin", "");
+                i.putExtra("destination", "");
+                i.putExtra("departDate", 0L);
+                i.putExtra("returnDate", 0L);
+                i.putExtra("departTime", "");
+                i.putExtra("returnTime", "");
+                i.putExtra("airline", "");
+                i.putExtra("flightNumber", "");
+                startActivity(i);
             }
         });
 
@@ -48,7 +57,16 @@ public class TripManagement extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = (Trip) parent.getItemAtPosition(position);
-
+                Intent i = new Intent(this, UpdateItinerary.class);
+                i.putExtra("origin", trip.Origin);
+                i.putExtra("destination", trip.Destination);
+                i.putExtra("departDate", System.currentTimeMillis());
+                i.putExtra("returnDate", System.currentTimeMillis());
+                i.putExtra("departTime", trip.DepartureTime);
+                i.putExtra("returnTime", trip.ArrivalTime);
+                i.putExtra("airline", trip.Airline);
+                i.putExtra("flightNumber", trip.FlightNumber);
+                startActivity(i);
             }
         });
     }
