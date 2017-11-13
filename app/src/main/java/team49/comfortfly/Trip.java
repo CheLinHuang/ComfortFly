@@ -1,7 +1,7 @@
 package team49.comfortfly;
 
 public class Trip {
-    String FRID;
+    String fsid;
     String Origin;
     String Destination;
     String DepartureTime;
@@ -13,7 +13,7 @@ public class Trip {
     String Duration;
 
     public Trip() {
-        FRID = "!";
+        fsid = "";
         Origin = "TPE";
         Destination = "ORD";
         DepartureDate = "2013-10-25";
@@ -23,5 +23,12 @@ public class Trip {
         Airline = "AA";
         FlightNumber = "666";
         Duration = "1h 10m";
+    }
+
+    @Override
+    public String toString() {
+        return "\"origin\":\"" + Origin + "\",\"dest\":\"" + Destination + "\",\"depart_time\":\"" + DepartureDate
+                + " " + DepartureTime + "\",\"arrival_time\":\"" + ArrivalDate + " " + ArrivalTime + "\",\"airline\":\"" +
+                Airline + "\",\"flight_num\":\"" + FlightNumber + "\"";
     }
 }

@@ -3,6 +3,7 @@ package team49.comfortfly;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,13 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -124,6 +132,7 @@ public class UpdateItinerary extends AppCompatActivity {
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new SendItinerary().execute();
                 //check valid
 //                AirlineReservation a = new AirlineReservation();
 //                a.execute(slice);
@@ -134,6 +143,7 @@ public class UpdateItinerary extends AppCompatActivity {
                         || StartDate.compareTo(curDate) == -1 || ReturnDate.compareTo(StartDate) == -1) {
                     alert11.show();
                 } else {
+
 //                    Intent i = new Intent(UpdateItinerary.this, FlightSearchResult.class);
 //                    i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
 //                    i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
@@ -251,6 +261,38 @@ public class UpdateItinerary extends AppCompatActivity {
         }
         if (flightNumberInput != "") {
             flightNumber.setText(flightNumberInput);
+        }
+    }
+
+    class SendItinerary extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/trip?token=" + Home.token);
+            Trip trip = new Trip();
+            trip.Origin = "TPE";
+            trip.Destination = "ORD";
+            trip.DepartureDate = "2013-10-25";
+            trip.DepartureTime = "11:00";
+            trip.ArrivalDate = "2017-10-29";
+            trip.ArrivalTime = "23:00";
+            trip.Airline = "AA";
+            trip.FlightNumber = "666";
+
+            try {
+                httppost.setEntity(new StringEntity("{\"action\":\"insert\"," + trip.toString() + "}"));
+                HttpResponse response = httpclient.execute(httppost);
+                System.out.println(response.getStatusLine().getStatusCode());
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    String responseString = EntityUtils.toString(response.getEntity());
+                    System.out.println(responseString);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return true;
         }
     }
 }
