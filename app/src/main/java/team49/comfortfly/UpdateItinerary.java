@@ -22,6 +22,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -196,7 +197,6 @@ public class UpdateItinerary extends AppCompatActivity {
                 Log.i(TAG, "Place: " + place.getName());
                 Log.i(TAG, "Place: " + place.getLatLng());
                 DestinationLatLng = place.getLatLng().toString();
-
             }
 
             @Override
@@ -264,35 +264,61 @@ public class UpdateItinerary extends AppCompatActivity {
         }
     }
 
-    class SendItinerary extends AsyncTask<Void, Void, Boolean> {
+    class SendItinerary extends AsyncTask<Trip, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Boolean doInBackground(Trip... params) {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/trip?token=" + Home.token);
-            Trip trip = new Trip();
-            trip.Origin = "TPE";
-            trip.Destination = "ORD";
-            trip.DepartureDate = "2013-10-25";
-            trip.DepartureTime = "11:00";
-            trip.ArrivalDate = "2017-10-29";
-            trip.ArrivalTime = "23:00";
-            trip.Airline = "AA";
-            trip.FlightNumber = "666";
 
+            Trip trip = params[0];
             try {
-                httppost.setEntity(new StringEntity("{\"action\":\"insert\"," + trip.toString() + "}"));
+
+                if (!OriginLatLng.equals("")) {
+                    /* Get departure airport code */
+                    HttpGet httpget = new HttpGet("http://iatageo.com/getCode/" + OriginLatLng.split(",")[0] +
+                            "/" + OriginLatLng.split(",")[1]);
+                    HttpResponse response = httpclient.execute(httpget);
+
+                    if (response.getStatusLine().getStatusCode() == 200) {
+                        String responseString = EntityUtils.toString(response.getEntity());
+                        trip.Origin = responseString.split("\"")[7];
+                    }
+                }
+
+                if (!DestinationLatLng.equals("")) {
+                    /* Get destination airport code */
+                    HttpGet httpget = new HttpGet("http://iatageo.com/getCode/" + DestinationLatLng.split(",")[0] +
+                            "/" + DestinationLatLng.split(",")[1]);
+                    HttpResponse response = httpclient.execute(httpget);
+                    if (response.getStatusLine().getStatusCode() == 200) {
+                        String responseString = EntityUtils.toString(response.getEntity());
+                        trip.Destination = responseString.split("\"")[7];
+                    }
+                }
+
+                if (trip.fsid.equals(""))
+                    httppost.setEntity(new StringEntity("{\"action\":\"insert\"," + trip.toString() + "}"));
+                else
+                    httppost.setEntity(new StringEntity("{\"action\":\"update\",\"fsid\":\"" + trip.fsid + "\"," + trip.toString() + "}"));
+
                 HttpResponse response = httpclient.execute(httppost);
                 System.out.println(response.getStatusLine().getStatusCode());
                 if (response.getStatusLine().getStatusCode() == 200) {
                     String responseString = EntityUtils.toString(response.getEntity());
                     System.out.println(responseString);
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            UpdateItinerary.this.finishActivity(0);
         }
     }
 }

@@ -41,6 +41,7 @@ public class TripManagement extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(TripManagement.this, UpdateItinerary.class);
+                i.putExtra("fsid", "");
                 i.putExtra("origin", "");
                 i.putExtra("destination", "");
                 i.putExtra("departDate", "");
@@ -122,6 +123,7 @@ public class TripManagement extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Trip trip = (Trip) parent.getItemAtPosition(position);
                     Intent i = new Intent(TripManagement.this, UpdateItinerary.class);
+                    i.putExtra("fsid", trip.fsid);
                     i.putExtra("origin", trip.Origin);
                     i.putExtra("destination", trip.Destination);
                     i.putExtra("departDate", trip.DepartureDate);
