@@ -35,10 +35,12 @@ import java.util.Date;
 public class UpdateItinerary extends AppCompatActivity {
 
     String curDate;
-    String OriginLatLng;
-    String DestinationLatLng;
+    String OriginLatLng = "";
+    String DestinationLatLng = "";
     String StartDate;
     String ReturnDate;
+    String DepartureTime;
+    String ArrivalTime;
     CalendarView StartDateView;
     CalendarView ReturnDateView;
     Button Search;
@@ -46,6 +48,7 @@ public class UpdateItinerary extends AppCompatActivity {
     EditText airline;
     EditText flightNumber;
 
+    String fsidInput;
     String originInput;
     String destinationInput;
     String departDateInput;
@@ -68,6 +71,7 @@ public class UpdateItinerary extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView1);
 
         Intent intent = getIntent();
+        fsidInput = intent.getExtras().getString("fsid");
         originInput = intent.getExtras().getString("origin");
         destinationInput = intent.getExtras().getString("destination");
         departDateInput = intent.getExtras().getString("departDate");
@@ -132,18 +136,39 @@ public class UpdateItinerary extends AppCompatActivity {
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new SendItinerary().execute();
+//                new SendItinerary().execute();
                 //check valid
 //                AirlineReservation a = new AirlineReservation();
 //                a.execute(slice);
                 Calendar date = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 curDate = sdf.format(date.getTime());
-                if (OriginLatLng == null || DestinationLatLng == null || StartDate == null || ReturnDate == null
-                        || StartDate.compareTo(curDate) == -1 || ReturnDate.compareTo(StartDate) == -1) {
+                if (fsidInput.equals("") && (OriginLatLng.equals("") || DestinationLatLng.equals("")
+                        || StartDate == null || ReturnDate == null
+                        || DepartureTime == null || ArrivalTime == null
+                        || airline == null || flightNumber == null
+                        || ReturnDate.compareTo(StartDate) == -1)) {
                     alert11.show();
                 } else {
-
+                    Trip trip = new Trip();
+                    trip.fsid = fsidInput;
+                    trip.Origin = originInput;
+                    trip.Destination = destinationInput;
+                    trip.DepartureDate = StartDate;
+                    trip.DepartureTime = DepartureTime;
+                    trip.ArrivalDate = ReturnDate;
+                    trip.ArrivalTime = ArrivalTime;
+                    trip.Airline = airline.toString();
+                    trip.FlightNumber = flightNumber.toString();
+                    System.out.println(fsidInput);
+                    System.out.println(originInput);
+                    System.out.println(destinationInput);
+                    System.out.println(StartDate);
+                    System.out.println(DepartureTime);
+                    System.out.println(ReturnDate);
+                    System.out.println(ArrivalTime);
+                    System.out.println(airline.toString());
+                    System.out.println(flightNumber.toString());
 //                    Intent i = new Intent(UpdateItinerary.this, FlightSearchResult.class);
 //                    i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
 //                    i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
@@ -221,7 +246,8 @@ public class UpdateItinerary extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(UpdateItinerary.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        startTime.setText(selectedHour + ":" + selectedMinute);
+                        startTime.setText(selectedHour + ":" + (selectedMinute < 10 ? "0" + selectedMinute : selectedMinute));
+                        DepartureTime = selectedHour + ":" + (selectedMinute < 10 ? "0" + selectedMinute : selectedMinute);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select Time");
@@ -245,6 +271,7 @@ public class UpdateItinerary extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         endTime.setText(selectedHour + ":" + (selectedMinute < 10 ? "0" + selectedMinute : selectedMinute));
+                        ArrivalTime = selectedHour + ":" + (selectedMinute < 10 ? "0" + selectedMinute : selectedMinute);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select Time");
@@ -264,36 +291,36 @@ public class UpdateItinerary extends AppCompatActivity {
         }
     }
 
-    class SendItinerary extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/trip?token=" + Home.token);
-            Trip trip = new Trip();
-            trip.Origin = "TPE";
-            trip.Destination = "ORD";
-            trip.DepartureDate = "2013-10-25";
-            trip.DepartureTime = "11:00";
-            trip.ArrivalDate = "2017-10-29";
-            trip.ArrivalTime = "23:00";
-            trip.Airline = "AA";
-            trip.FlightNumber = "666";
-
-            try {
-                httppost.setEntity(new StringEntity("{\"action\":\"insert\"," + trip.toString() + "}"));
-                HttpResponse response = httpclient.execute(httppost);
-                System.out.println(response.getStatusLine().getStatusCode());
-                if (response.getStatusLine().getStatusCode() == 200) {
-                    String responseString = EntityUtils.toString(response.getEntity());
-                    System.out.println(responseString);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return true;
-        }
-    }
+//    class SendItinerary extends AsyncTask<Void, Void, Boolean> {
+//
+//        @Override
+//        protected Boolean doInBackground(Void... params) {
+//            HttpClient httpclient = new DefaultHttpClient();
+//            HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/trip?token=" + Home.token);
+//            Trip trip = new Trip();
+//            trip.Origin = "TPE";
+//            trip.Destination = "ORD";
+//            trip.DepartureDate = "2013-10-25";
+//            trip.DepartureTime = "11:00";
+//            trip.ArrivalDate = "2017-10-29";
+//            trip.ArrivalTime = "23:00";
+//            trip.Airline = "AA";
+//            trip.FlightNumber = "666";
+//
+//            try {
+//                httppost.setEntity(new StringEntity("{\"action\":\"insert\"," + trip.toString() + "}"));
+//                HttpResponse response = httpclient.execute(httppost);
+//                System.out.println(response.getStatusLine().getStatusCode());
+//                if (response.getStatusLine().getStatusCode() == 200) {
+//                    String responseString = EntityUtils.toString(response.getEntity());
+//                    System.out.println(responseString);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            return true;
+//        }
+//    }
 }
 
