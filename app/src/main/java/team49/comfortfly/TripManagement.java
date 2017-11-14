@@ -21,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +55,8 @@ public class TripManagement extends AppCompatActivity {
             }
         });
         listViewTripManage = (ListView) findViewById(R.id.listViewTripManage);
-        list = new ArrayList<>();
-        new GetTripsTask().execute();
+        //list = new ArrayList<>();
+        //new GetTripsTask().execute();
     }
 
     @Override
@@ -68,8 +69,31 @@ public class TripManagement extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        list = new ArrayList<>();
-        new GetTripsTask().execute();
+        //list = new ArrayList<>();
+        //new GetTripsTask().execute();
+    }
+
+    String duration(String time1, String time2) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        StringBuilder sb = new StringBuilder();
+        try {
+            long t1 = f.parse(time1).getTime();
+            long t2 = f.parse(time2).getTime();
+            long diff = (t2 - t1) / 1000 / 60;
+            if (diff > 24 * 60) {
+                sb.append(diff / 24 / 60);
+                sb.append("d");
+            }
+            if (diff > 60) {
+                sb.append(diff % (24 * 60) / 60);
+                sb.append("h");
+            }
+            sb.append(diff % 60);
+            sb.append("m");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 
     class GetTripsTask extends AsyncTask<Void, Void, Boolean> {
@@ -97,12 +121,13 @@ public class TripManagement extends AppCompatActivity {
                         trip.Destination = arr.getJSONObject(i).getString("dest");
                         trip.FlightNumber = arr.getJSONObject(i).getString("flight_num");
                         trip.Airline = arr.getJSONObject(i).getString("airline");
-                        String[] depart_time = arr.getJSONObject(i).getString("depart_time").split(" ");
-                        trip.DepartureDate = depart_time[0];
-                        trip.DepartureTime = depart_time[1];
-                        String[] arrival_time = arr.getJSONObject(i).getString("arrival_time").split(" ");
-                        trip.ArrivalDate = arrival_time[0];
-                        trip.ArrivalTime = arrival_time[1];
+                        String depart_time = arr.getJSONObject(i).getString("depart_time");
+                        trip.DepartureDate = depart_time.split(" ")[0];
+                        trip.DepartureTime = depart_time.split(" ")[1];
+                        String arrival_time = arr.getJSONObject(i).getString("arrival_time");
+                        trip.ArrivalDate = arrival_time.split(" ")[0];
+                        trip.ArrivalTime = arrival_time.split(" ")[1];
+                        trip.Duration = duration(depart_time, arrival_time);
                         list.add(trip);
                     }
                 }
@@ -135,7 +160,6 @@ public class TripManagement extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-
 
             listViewTripManage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(
             ) {

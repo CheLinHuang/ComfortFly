@@ -88,6 +88,7 @@ public class UpdateItinerary extends AppCompatActivity {
                 Date d = f.parse(departDateInput);
                 long milliseconds = d.getTime();
                 StartDateView.setDate(milliseconds);
+                StartDate = departDateInput;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -107,6 +108,7 @@ public class UpdateItinerary extends AppCompatActivity {
                 Date d = f.parse(returnDateInput);
                 long milliseconds = d.getTime();
                 ReturnDateView.setDate(milliseconds);
+                ReturnDate = returnDateInput;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -137,17 +139,13 @@ public class UpdateItinerary extends AppCompatActivity {
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                new SendItinerary().execute();
-                //check valid
-//                AirlineReservation a = new AirlineReservation();
-//                a.execute(slice);
                 Calendar date = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 curDate = sdf.format(date.getTime());
                 if (fsidInput.equals("") && (OriginLatLng.equals("") || DestinationLatLng.equals("")
-                        || StartDate == null || ReturnDate == null
-                        || DepartureTime == null || ArrivalTime == null
-                        || airline == null || flightNumber == null
+                        || StartDate == null || StartDate.equals("") || ReturnDate == null || ReturnDate.equals("")
+                        || DepartureTime == null || ArrivalTime == null || DepartureTime.equals("") || ArrivalTime.equals("")
+                        || airline == null || flightNumber == null || airline.equals("") || flightNumber.equals("")
                         || ReturnDate.compareTo(StartDate) == -1)) {
                     alert11.show();
                 } else {
@@ -159,8 +157,8 @@ public class UpdateItinerary extends AppCompatActivity {
                     trip.DepartureTime = DepartureTime;
                     trip.ArrivalDate = ReturnDate;
                     trip.ArrivalTime = ArrivalTime;
-                    trip.Airline = airline.toString();
-                    trip.FlightNumber = flightNumber.toString();
+                    trip.Airline = airline.getText().toString();
+                    trip.FlightNumber = flightNumber.getText().toString();
                     System.out.println(fsidInput);
                     System.out.println(originInput);
                     System.out.println(destinationInput);
@@ -168,8 +166,10 @@ public class UpdateItinerary extends AppCompatActivity {
                     System.out.println(DepartureTime);
                     System.out.println(ReturnDate);
                     System.out.println(ArrivalTime);
-                    System.out.println(airline.toString());
-                    System.out.println(flightNumber.toString());
+                    System.out.println(airline.getText().toString());
+                    System.out.println(flightNumber.getText().toString());
+
+                    new SendItinerary().execute(trip);
 //                    Intent i = new Intent(UpdateItinerary.this, FlightSearchResult.class);
 //                    i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
 //                    i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
@@ -196,7 +196,8 @@ public class UpdateItinerary extends AppCompatActivity {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
                 Log.i(TAG, "Place: " + place.getLatLng());
-                OriginLatLng = place.getLatLng().toString();
+                if (!place.getLatLng().equals(""))
+                    OriginLatLng = (place.getLatLng().toString().split("\\(")[1]).split("\\)")[0];
             }
 
             @Override
@@ -221,7 +222,8 @@ public class UpdateItinerary extends AppCompatActivity {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
                 Log.i(TAG, "Place: " + place.getLatLng());
-                DestinationLatLng = place.getLatLng().toString();
+                if (!place.getLatLng().equals(""))
+                    DestinationLatLng = (place.getLatLng().toString().split("\\(")[1]).split("\\)")[0];
             }
 
             @Override
@@ -232,7 +234,10 @@ public class UpdateItinerary extends AppCompatActivity {
         });
 
         final EditText startTime = (EditText) findViewById(R.id.startTime);
-        if (departTimeInput != "") startTime.setText(departTimeInput);
+        if (departTimeInput != "") {
+            startTime.setText(departTimeInput);
+            DepartureTime = departTimeInput;
+        }
         startTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -256,7 +261,10 @@ public class UpdateItinerary extends AppCompatActivity {
             }
         });
         final EditText endTime = (EditText) findViewById(R.id.endTime);
-        if (returnTimeInput != "") endTime.setText(returnTimeInput);
+        if (returnTimeInput != "") {
+            endTime.setText(returnTimeInput);
+            ArrivalTime = returnTimeInput;
+        }
         endTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -329,6 +337,7 @@ public class UpdateItinerary extends AppCompatActivity {
                 else
                     httppost.setEntity(new StringEntity("{\"action\":\"update\",\"fsid\":\"" + trip.fsid + "\"," + trip.toString() + "}"));
 
+
                 HttpResponse response = httpclient.execute(httppost);
                 System.out.println(response.getStatusLine().getStatusCode());
                 if (response.getStatusLine().getStatusCode() == 200) {
@@ -345,7 +354,7 @@ public class UpdateItinerary extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            UpdateItinerary.this.finishActivity(0);
+            UpdateItinerary.this.finish();
         }
     }
 }
