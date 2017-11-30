@@ -24,4 +24,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="13dp"
         android:text="Show Existing Trip" />
+
+    <Button
+        android:id="@+id/showSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/showButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:text="Setting" />
+
 </RelativeLayout>

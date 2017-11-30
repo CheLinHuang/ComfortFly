@@ -11,18 +11,20 @@ public class Trip {
     String Airline;
     String FlightNumber;
     String Duration;
+    String Price;
 
     public Trip() {
         fsid = "";
-        Origin = "TPE";
-        Destination = "ORD";
-        DepartureDate = "2013-10-25";
-        DepartureTime = "11:00";
-        ArrivalDate = "2017-10-29";
-        ArrivalTime = "23:00";
-        Airline = "AA";
-        FlightNumber = "666";
-        Duration = "1h 10m";
+        Origin = "";
+        Destination = "";
+        DepartureDate = "";
+        DepartureTime = "";
+        ArrivalDate = "";
+        ArrivalTime = "";
+        Airline = "";
+        FlightNumber = "";
+        Duration = "";
+        Price = "";
     }
 
     @Override

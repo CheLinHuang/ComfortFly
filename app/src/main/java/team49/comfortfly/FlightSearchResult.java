@@ -1,5 +1,7 @@
 package team49.comfortfly;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +14,10 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.qpxExpress.QPXExpress;
 import com.google.api.services.qpxExpress.QPXExpressRequestInitializer;
+import com.google.api.services.qpxExpress.model.LegInfo;
 import com.google.api.services.qpxExpress.model.PassengerCounts;
+import com.google.api.services.qpxExpress.model.SegmentInfo;
+import com.google.api.services.qpxExpress.model.SliceInfo;
 import com.google.api.services.qpxExpress.model.SliceInput;
 import com.google.api.services.qpxExpress.model.TripOption;
 import com.google.api.services.qpxExpress.model.TripOptionsRequest;
@@ -27,6 +32,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FlightSearchResult extends AppCompatActivity {
@@ -108,20 +114,20 @@ public class FlightSearchResult extends AppCompatActivity {
                 httpTransport = new ApacheHttpTransport();
 
                 SliceInput slice1 = new SliceInput();
-                slice1.setMaxStops(1);
+                slice1.setMaxStops(3);
                 slice1.setOrigin(originAirport);
                 slice1.setDestination(destinationAirport);
                 slice1.setDate(departDate);
 
-                SliceInput slice2 = new SliceInput();
-                slice2.setMaxStops(1);
+                /*SliceInput slice2 = new SliceInput();
+                slice2.setMaxStops(3);
                 slice2.setOrigin(destinationAirport);
                 slice2.setDestination(originAirport);
-                slice2.setDate(returnDate);
+                slice2.setDate(returnDate);*/
 
                 List<SliceInput> slices = new ArrayList<>();
                 slices.add(slice1);
-                slices.add(slice2);
+                //slices.add(slice2);
 
                 TripOptionsRequest request = new TripOptionsRequest();
                 request.setSolutions(20);
@@ -135,7 +141,8 @@ public class FlightSearchResult extends AppCompatActivity {
 
                 TripsSearchResponse list = qpXExpress.trips().search(parameters).execute();
                 this.tripResults = list.getTrips().getTripOption();
-
+                if (this.tripResults == null || this.tripResults.size() == 0)
+                    return false;
             } catch (IOException e) {
                 System.err.println(e.getMessage());
                 return false;
@@ -150,8 +157,73 @@ public class FlightSearchResult extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                SearchResultAdapter s = new SearchResultAdapter(getApplicationContext(), tripResults);
+                List<Trip> result = new LinkedList<>();
+                for (TripOption t : this.tripResults) {
+
+                    // Populate the data into the template view
+                    SliceInfo sliceInfo = t.getSlice().get(0);
+                    for (SegmentInfo seg : sliceInfo.getSegment()) {
+                        for (LegInfo leg : seg.getLeg()) {
+                            Trip trip = new Trip();
+
+                            String departTime = leg.getDepartureTime();
+                            String arrivalTime = leg.getArrivalTime();
+
+                            //trip.DepartureTime = departTime.substring(11, 16);
+                            //trip.ArrivalTime = arrivalTime.substring(11, 16);
+
+                            trip.DepartureDate = departTime.substring(0, 10);
+                            trip.ArrivalDate = arrivalTime.substring(0, 10);
+                            trip.DepartureTime = departTime.substring(11, 16);
+                            trip.ArrivalTime = arrivalTime.substring(11, 16);
+                            trip.Origin = leg.getOrigin();
+                            trip.Destination = leg.getDestination();
+
+                            trip.Airline = seg.getFlight().getCarrier();
+                            trip.FlightNumber = seg.getFlight().getNumber();
+                            trip.Duration = "";
+                            result.add(trip);
+                        }
+                    }
+                    Trip tripp = new Trip();
+                    StringBuilder sb = new StringBuilder();
+
+                    int duration = sliceInfo.getDuration();
+                    if (duration > 60) {
+                        sb.append(duration / 60);
+                        sb.append("h ");
+                    }
+                    sb.append(duration % 60);
+                    sb.append("m");
+
+                    tripp.Duration = sb.toString();
+                    tripp.Price = t.getPricing().get(0).getSaleTotal();
+                    result.add(tripp);
+                }
+                System.out.println("Test");
+                for (Trip t : result) {
+                    System.out.println(t.DepartureTime);
+                    System.out.println("D" + t.Duration);
+                }
+
+                TripDetailAdapter s = new TripDetailAdapter(getApplicationContext(), result);
                 resultListView.setAdapter(s);
+            } else {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(FlightSearchResult.this);
+                builder.setTitle("Alert");
+                builder.setMessage("No result found!");
+                builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
+                builder.create().show();
             }
         }
     }
