@@ -198,6 +198,9 @@ public class FlightSearchResult extends AppCompatActivity {
 
                     tripp.Duration = sb.toString();
                     tripp.Price = t.getPricing().get(0).getSaleTotal();
+                    // TODO
+                    // tripp.Delay = ?
+
                     result.add(tripp);
                 }
                 System.out.println("Test");

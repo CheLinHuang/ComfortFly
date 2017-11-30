@@ -28,5 +28,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />
 
+    <TextView
+        android:id="@+id/textViewDelay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_toRightOf="@+id/textViewSummaryPrice"
+        android:text="Delay:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ public class Trip {
     String FlightNumber;
     String Duration;
     String Price;
+    String Delay;
 
     public Trip() {
         fsid = "";
@@ -25,6 +26,7 @@ public class Trip {
         FlightNumber = "";
         Duration = "";
         Price = "";
+        Delay = "";
     }
 
     @Override

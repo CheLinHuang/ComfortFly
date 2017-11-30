@@ -48,8 +48,10 @@ public class TripDetailAdapter extends ArrayAdapter<Trip> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_trip_summary, null);
             TextView textViewSummaryPrice = (TextView) convertView.findViewById(R.id.textViewSummaryPrice);
             TextView textViewSummaryDuration = (TextView) convertView.findViewById(R.id.textViewSummaryDuration);
+            TextView textViewDelay = convertView.findViewById(R.id.textViewDelay);
             textViewSummaryPrice.setText(result.Price);
             textViewSummaryDuration.setText(result.Duration);
+            textViewDelay.setText(result.Delay);
         }
         // Return the completed view to render on screen
         return convertView;
