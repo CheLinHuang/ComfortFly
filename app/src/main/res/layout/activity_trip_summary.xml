@@ -16,8 +16,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="Duration:"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textViewSummaryPrice"
@@ -25,17 +25,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="Price:"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textViewDelay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_toRightOf="@+id/textViewSummaryPrice"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="110dp"
         android:text="Delay:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
 </RelativeLayout>

@@ -35,7 +35,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -586,7 +585,7 @@ public class FlightSearchResult extends AppCompatActivity {
                     tripp.Duration = sb.toString();
                     tripp.Price = t.getPricing().get(0).getSaleTotal();
                     // TODO
-                    tripp.Delay = "Delay:" + String.valueOf(delayTime.intValue());
+                    tripp.Delay = "Delay:" + String.valueOf(delayTime.intValue()) + "m";
 
                     result.add(tripp);
                 }
@@ -614,23 +613,23 @@ public class FlightSearchResult extends AppCompatActivity {
                                 position--;
                             }
 
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(FlightSearchResult.this);
+                            builder.setTitle("");
+                            builder.setMessage("Do you want to add this itinerary to your trips?");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new SendNewItinerary().execute(list.toArray(new Trip[list.size()]));
+                                }
+                            });
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+
+                            builder.create().show();
                         }
-
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(FlightSearchResult.this);
-                        builder.setTitle("");
-                        builder.setMessage("Do you want to add this itinerary to your trips?");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                new SendNewItinerary().execute(list.toArray(new Trip[list.size()]));
-                            }
-                        });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-
-                        builder.create().show();
 
                     }
                 });

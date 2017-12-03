@@ -16,7 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="LAX"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textViewTripDepartAirport"
         android:text="ORD"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
     <TextView
@@ -34,9 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="185dp"
         android:text="2017-10-25"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
     <TextView
@@ -44,29 +45,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="180dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="110dp"
         android:text="11:00AM"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/textViewTripArrivalDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewTripArrivalAirport"
-        android:layout_marginLeft="50dp"
+        android:layout_alignBottom="@+id/textViewTripArrivalAirport"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="185dp"
         android:text="2017-11-25"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/textViewTripArrivalTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewTripArrivalAirport"
-        android:layout_marginLeft="180dp"
+        android:layout_alignBottom="@+id/textViewTripArrivalDate"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="110dp"
         android:text="11:00AM"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
     <TextView
@@ -74,10 +78,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black"
         android:layout_below="@+id/textViewTripAirline"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textViewTripAirline"
@@ -86,8 +90,8 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/textViewTripFlightNum"
         android:text="AA"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textViewTripFlightNum"
@@ -96,8 +100,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="1234"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
 </RelativeLayout>
