@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.api.client.http.HttpTransport;
@@ -27,6 +29,8 @@ import com.google.api.services.qpxExpress.model.TripsSearchResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -391,7 +395,6 @@ public class FlightSearchResult extends AppCompatActivity {
         originLatLng = intent.getExtras().getString("originLatLng");
         destinationLatLng = intent.getExtras().getString("destinationLatLng");
         departDate = intent.getExtras().getString("departDate");
-        returnDate = intent.getExtras().getString("returnDate");
 
         GoogleFlightSearch a = new GoogleFlightSearch();
         a.execute();
@@ -495,7 +498,7 @@ public class FlightSearchResult extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                List<Trip> result = new LinkedList<>();
+                final List<Trip> result = new LinkedList<>();
                 for (TripOption t : this.tripResults) {
 
                     // Populate the data into the template view
@@ -595,6 +598,43 @@ public class FlightSearchResult extends AppCompatActivity {
 
                 TripDetailAdapter s = new TripDetailAdapter(getApplicationContext(), result);
                 resultListView.setAdapter(s);
+
+                resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        Trip trip = (Trip) parent.getItemAtPosition(position);
+                        if (!trip.Price.equals("")) {
+
+                            position--;
+                            while (position > 0 && result.get(position).Price.equals("")) {
+                                System.out.println(result.get(position));
+                                list.add(result.get(position));
+                                position--;
+                            }
+
+                        }
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(FlightSearchResult.this);
+                        builder.setTitle("");
+                        builder.setMessage("Do you want to add this itinerary to your trips?");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                new SendNewItinerary().execute(list.toArray(new Trip[list.size()]));
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+
+                        builder.create().show();
+
+                    }
+                });
+
             } else {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(FlightSearchResult.this);
                 builder.setTitle("Alert");
@@ -612,6 +652,36 @@ public class FlightSearchResult extends AppCompatActivity {
                 });
                 builder.create().show();
             }
+        }
+    }
+
+    List<Trip> list = new ArrayList<>();
+
+    class SendNewItinerary extends AsyncTask<Trip, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Trip... params) {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/trip?token=" + Home.token);
+
+
+            try {
+
+                for (Trip trip : params) {
+                    httppost.setEntity(new StringEntity("{\"action\":\"insert\"," + trip.toString() + "}"));
+                    HttpResponse response = httpclient.execute(httppost);
+                    System.out.println(response.getStatusLine().getStatusCode());
+                    if (response.getStatusLine().getStatusCode() == 200) {
+                        String responseString = EntityUtils.toString(response.getEntity());
+                        System.out.println(responseString);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return true;
         }
     }
 }
