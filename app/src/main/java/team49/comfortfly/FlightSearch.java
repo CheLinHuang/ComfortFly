@@ -25,7 +25,7 @@ public class FlightSearch extends AppCompatActivity {
     String OriginLatLng;
     String DestinationLatLng;
     String StartDate;
-    String ReturnDate;
+//    String ReturnDate;
     CalendarView StartDateView;
     CalendarView ReturnDateView;
     Button Search;
@@ -52,15 +52,15 @@ public class FlightSearch extends AppCompatActivity {
             }
         });
 
-        ReturnDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,
-                                            int dayOfMonth) {
-                int d = dayOfMonth;
-                ReturnDate = String.valueOf(year) + '-' + String.valueOf(month + 1) + '-' + String.valueOf(d);
-            }
-        });
+//        ReturnDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+//
+//            @Override
+//            public void onSelectedDayChange(CalendarView view, int year, int month,
+//                                            int dayOfMonth) {
+//                int d = dayOfMonth;
+//                ReturnDate = String.valueOf(year) + '-' + String.valueOf(month + 1) + '-' + String.valueOf(d);
+//            }
+//        });
 
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setMessage("Missing information");
@@ -84,20 +84,19 @@ public class FlightSearch extends AppCompatActivity {
                 Calendar date = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 curDate = sdf.format(date.getTime());
-                if (OriginLatLng == null || DestinationLatLng == null || StartDate == null || ReturnDate == null
-                        || StartDate.compareTo(curDate) == -1 || ReturnDate.compareTo(StartDate) == -1) {
+                if (OriginLatLng == null || DestinationLatLng == null || StartDate == null
+                        || StartDate.compareTo(curDate) == -1 ) {
                     alert11.show();
                 } else {
 
                     System.out.println((OriginLatLng.split("\\(")[1]).split("\\)")[0]);
                     System.out.println((DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
                     System.out.println(StartDate);
-                    System.out.println(ReturnDate);
                     Intent i = new Intent(FlightSearch.this, FlightSearchResult.class);
                     i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
                     i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
                     i.putExtra("departDate", StartDate);
-                    i.putExtra("returnDate", ReturnDate);
+//                    i.putExtra("returnDate", ReturnDate);
                     startActivity(i);
                 }
             }

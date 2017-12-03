@@ -13,20 +13,32 @@
         android:layout_width="368dp"
         android:layout_height="50dp"
         android:orientation="horizontal"
+        android:gravity="center_horizontal"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
         <fragment
             android:id="@+id/origin"
-            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
             android:ems="10"
             android:inputType="text" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/LY1"
+        android:layout_width="368dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/LY"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
         <fragment
             android:id="@+id/destination"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,15 +50,17 @@
 
     <LinearLayout
         android:id="@+id/LY2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/LY"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/LY1"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="16dp">
 
         <CalendarView
             android:id="@+id/startDate"
+            android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/LY"
@@ -56,16 +70,16 @@
             android:hint="2017-10-12"
             android:inputType="date" />
 
-        <CalendarView
-            android:id="@+id/returnDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/LY"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="2017-10-12"
-            android:inputType="date" />
+        <!--<CalendarView-->
+            <!--android:id="@+id/returnDate"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/LY"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_weight="1"-->
+            <!--android:ems="10"-->
+            <!--android:hint="2017-10-12"-->
+            <!--android:inputType="date" />-->
     </LinearLayout>
     <!--<EditText-->
     <!--android:id="@+id/editText3"-->
