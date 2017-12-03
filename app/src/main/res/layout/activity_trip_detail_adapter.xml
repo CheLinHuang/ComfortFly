@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="170dp"
+        android:layout_marginLeft="180dp"
         android:text="11:00AM"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />
@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textViewTripArrivalAirport"
-        android:layout_marginLeft="170dp"
+        android:layout_marginLeft="180dp"
         android:text="11:00AM"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />

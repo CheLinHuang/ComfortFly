@@ -57,7 +57,6 @@ public class FlightSearchResult extends AppCompatActivity {
         originLatLng = intent.getExtras().getString("originLatLng");
         destinationLatLng = intent.getExtras().getString("destinationLatLng");
         departDate = intent.getExtras().getString("departDate");
-        returnDate = intent.getExtras().getString("returnDate");
 
         GoogleFlightSearch a = new GoogleFlightSearch();
         a.execute();
@@ -220,17 +219,35 @@ public class FlightSearchResult extends AppCompatActivity {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                         Trip trip = (Trip) parent.getItemAtPosition(position);
                         if (!trip.Price.equals("")) {
-                            List<Trip> list = new ArrayList<>();
+
                             position--;
                             while (position > 0 && result.get(position).Price.equals("")) {
                                 System.out.println(result.get(position));
                                 list.add(result.get(position));
                                 position--;
                             }
-                            new SendNewItinerary().execute(list.toArray(new Trip[list.size()]));
+
                         }
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(FlightSearchResult.this);
+                        builder.setTitle("");
+                        builder.setMessage("Do you want to add this itinerary to your trips?");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                new SendNewItinerary().execute(list.toArray(new Trip[list.size()]));
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+
+                        builder.create().show();
+
                     }
                 });
 
@@ -253,6 +270,8 @@ public class FlightSearchResult extends AppCompatActivity {
             }
         }
     }
+
+    List<Trip> list = new ArrayList<>();
 
     class SendNewItinerary extends AsyncTask<Trip, Void, Boolean> {
 
