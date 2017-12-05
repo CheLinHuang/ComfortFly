@@ -13,18 +13,22 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 public class Home extends AppCompatActivity {
 
     Button Search;
     Button Show;
     Button Setting;
-    public static String token = "wu0lwqwia06gpe0dgy8x9k1m98zh1pud";
+    Button Chat;
+    public static String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        new LoginTask().execute();
 
         Search = (Button) findViewById(R.id.searchButton);
         Search.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +56,15 @@ public class Home extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        Chat = (Button) findViewById(R.id.showChat);
+        Chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Home.this, Chat_board.class);
+                startActivity(i);
+            }
+        });
     }
 
     class LoginTask extends AsyncTask<Void, Void, Void> {
@@ -70,6 +83,8 @@ public class Home extends AppCompatActivity {
                 if (response.getStatusLine().getStatusCode() == 200) {
                     String responseString = EntityUtils.toString(response.getEntity());
                     System.out.println(responseString);
+                    JSONObject obj = new JSONObject(responseString);
+                    Home.token = obj.getString("token");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

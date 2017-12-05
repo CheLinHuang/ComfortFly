@@ -13,7 +13,7 @@ public class TripDetailAdapter extends ArrayAdapter<Trip> {
 
     List<Trip> trips;
 
-    public TripDetailAdapter(Context context, List<Trip> trips) {
+    TripDetailAdapter(Context context, List<Trip> trips) {
         super(context, 0, trips);
         this.trips = trips;
     }
@@ -24,7 +24,7 @@ public class TripDetailAdapter extends ArrayAdapter<Trip> {
         // Get the data item for this position
         Trip result = super.getItem(position);
 
-        if (result.Duration.equals("")) {
+        if (result.Price.equals("")) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_trip_detail_adapter, null);
             TextView textViewTripDepartAirport = (TextView) convertView.findViewById(R.id.textViewTripDepartAirport);
             TextView textViewTripArrivalAirport = (TextView) convertView.findViewById(R.id.textViewTripArrivalAirport);

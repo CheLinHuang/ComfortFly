@@ -32,7 +32,10 @@
         <activity android:name=".Register" />
         <activity android:name=".Setting" />
         <activity android:name=".Chat" />
-        <activity android:name=".Chat_board"></activity>
+        <activity android:name=".Chat_board" />
+        <activity android:name=".ChatroomAdapter" />
+        <activity android:name=".Message" />
+        <activity android:name=".ChatAdapter"></activity>
     </application>
 
 </manifest>
