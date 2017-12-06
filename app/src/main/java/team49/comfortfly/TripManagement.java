@@ -3,6 +3,7 @@ package team49.comfortfly;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,8 +136,18 @@ public class TripManagement extends AppCompatActivity {
                         String[] companionList = companionString.substring(1, companionString.length() - 1).split(",");
                         Trip companionTrip = new Trip();
                         for (int j = 0; j < companionList.length; j++) {
-                            System.out.println(companionList[j]);
-                            companionTrip.Companion.add(companionList[j]);
+                            String comp = companionList[j].substring(1, companionList[j].length() - 1);
+                            System.out.println(comp);
+                            companionTrip.Companion.add(comp);
+                            String url;
+                            if (Character.isDigit(comp.charAt(0))) {
+                                url = "http://icons.iconarchive.com/icons/iconarchive/red-orb-alphabet/72/Number-"
+                                        + comp.charAt(0) + "-icon.png";
+                            } else {
+                                url = "http://icons.iconarchive.com/icons/iconarchive/red-orb-alphabet/72/Letter-" +
+                                        comp.charAt(0) + "-icon.png";
+                            }
+                            companionTrip.CompanionPic.add(BitmapFactory.decodeStream((InputStream) new URL(url).getContent()));
                         }
                         list.add(companionTrip);
                     }

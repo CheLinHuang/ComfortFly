@@ -15,9 +15,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,12 +35,16 @@ public class Chat extends AppCompatActivity {
     List<Message> chatList;
     Button mSubmitMsgButton;
     EditText message_editText;
+    SimpleDateFormat formatterChicago = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Intent intent = getIntent();
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         chatroomid = intent.getStringExtra("chatroomid");
         chatList = new ArrayList<>();
         lView = (ListView) findViewById(R.id.groupChatListView);
@@ -122,12 +129,10 @@ public class Chat extends AppCompatActivity {
 
             try {
 
-                SimpleDateFormat formatterChicago = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
 
                 httppost.setEntity(new StringEntity("{\"action\":\"search\",\"chatroomid\":\"" + chatroomid + "\"" +
-                        ",\"time_from\":\"" + formatter.format(new Date(System.currentTimeMillis())) + "\",\"number\":30}"));
+                        ",\"time_from\":\"" + formatter.format(new Date(System.currentTimeMillis() + Integer.MAX_VALUE)) + "\",\"number\":30}"));
                 HttpResponse response = httpclient.execute(httppost);
 
                 System.out.println(response.toString());
@@ -159,6 +164,48 @@ public class Chat extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
             setUpListView();
             mSubmitMsgButton.setEnabled(true);
+        }
+    }
+
+    class WebSocketThread extends Thread {
+
+        WebSocketClient websocket;
+
+        @Override
+        public void run() {
+            try {
+                URI url = new URI("ws://fa17-cs411-49.cs.illinois.edu:8888/ws");
+
+                websocket = new WebSocketClient(url) {
+                    @Override
+                    public void onOpen(ServerHandshake serverHandshake) {
+                        websocket.send(Home.email);
+                    }
+
+                    public void onMessage(String message) {
+                        String[] msg = message.split("|");
+                        if (msg[1].equals(chatroomid)) {
+
+                        }
+                        System.out.println("Got msg: " + message);
+                    }
+
+                    @Override
+                    public void onClose(int i, String s, boolean b) {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                };
+
+                // Establish WebSocket Connection
+                websocket.connect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

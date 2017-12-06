@@ -1,5 +1,7 @@
 package team49.comfortfly;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class Trip {
     String Price;
     String Delay;
     List<String> Companion;
+    List<Bitmap> CompanionPic;
 
     public Trip() {
         fsid = "";
@@ -32,6 +35,7 @@ public class Trip {
         Price = "";
         Delay = "";
         Companion = new ArrayList<>();
+        CompanionPic = new ArrayList<>();
     }
 
     @Override

@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile fileTree(include: ['*.jar'], dir: 'libs/qpxExpress')
     compile fileTree(include: ['*.jar'], dir: 'libs/qpxExpress/libs')
     //compile fileTree(include: ['*.jar'], dir: 'libs/qpxExpress/libs-sources')
