@@ -18,7 +18,11 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class Chat extends AppCompatActivity {
 
@@ -35,7 +39,7 @@ public class Chat extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         Intent intent = getIntent();
         chatroomid = intent.getStringExtra("chatroomid");
-
+        chatList = new ArrayList<>();
         lView = (ListView) findViewById(R.id.groupChatListView);
 
         new ChatDownloadTask().execute();
@@ -91,7 +95,6 @@ public class Chat extends AppCompatActivity {
                 if (response.getStatusLine().getStatusCode() == 200) {
                     String responseString = EntityUtils.toString(response.getEntity());
                     System.out.println(responseString);
-
                     return true;
                 }
             } catch (Exception e) {
@@ -118,8 +121,13 @@ public class Chat extends AppCompatActivity {
             HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/chatmessage?token=" + Home.token);
 
             try {
+
+                SimpleDateFormat formatterChicago = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
                 httppost.setEntity(new StringEntity("{\"action\":\"search\",\"chatroomid\":\"" + chatroomid + "\"" +
-                        ",\"time_from\":\"2017-12-1 00:00\",\"number\":10}"));
+                        ",\"time_from\":\"" + formatter.format(new Date(System.currentTimeMillis())) + "\",\"number\":30}"));
                 HttpResponse response = httpclient.execute(httppost);
 
                 System.out.println(response.toString());
@@ -136,7 +144,7 @@ public class Chat extends AppCompatActivity {
                     for (int i = 0; i < arr.length(); i++) {
                         Message msg = new Message(arr.getJSONObject(i).getString("content"),
                                 arr.getJSONObject(i).getString("sender"),
-                                arr.getJSONObject(i).getString("time"));
+                                formatterChicago.format(formatter.parse(arr.getJSONObject(i).getString("time"))));
                         chatList.add(msg);
                     }
                     return true;
@@ -154,4 +162,3 @@ public class Chat extends AppCompatActivity {
         }
     }
 }
-

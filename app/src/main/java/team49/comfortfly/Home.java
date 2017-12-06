@@ -30,6 +30,7 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         new LoginTask().execute();
+        //new Register.UserRegisterTask().execute();
 
         Search = (ImageButton) findViewById(R.id.searchButton);
         Search.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +76,7 @@ public class Home extends AppCompatActivity {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httpget = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/account");
-                httpget.setEntity(new StringEntity("{\"action\":\"login\",\"email\":\"123@456.edu\",\"password\":\"12345\"}"));
+                httpget.setEntity(new StringEntity("{\"action\":\"login\",\"email\":\"456@uiuc.edu\",\"password\":\"12345\"}"));
                 HttpResponse response = httpclient.execute(httpget);
 
                 System.out.println(response.toString());
