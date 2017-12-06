@@ -1,6 +1,7 @@
 package team49.comfortfly;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,10 +23,10 @@ public class ChatAdapter extends ArrayAdapter<Message> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Message msg = getItem(position);
-
-        TextView chatTextViewContent = (TextView) convertView.findViewById(R.id.chatTextViewContent);
-        TextView chatTextViewUserName = (TextView) convertView.findViewById(R.id.chatTextViewUserName);
-        TextView chatTextViewTime = (TextView) convertView.findViewById(R.id.chatTextViewTime);
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_chat_adapter, null);
+        TextView chatTextViewContent = convertView.findViewById(R.id.chatTextViewContent);
+        TextView chatTextViewUserName = convertView.findViewById(R.id.chatTextViewUserName);
+        TextView chatTextViewTime = convertView.findViewById(R.id.chatTextViewTime);
 
         chatTextViewContent.setText(msg.content);
         chatTextViewUserName.setText(msg.sender);

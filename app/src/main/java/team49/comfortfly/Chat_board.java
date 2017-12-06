@@ -7,8 +7,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import org.apache.http.HttpResponse;
@@ -38,8 +40,32 @@ public class Chat_board extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(Chat_board.this, Chat.class);
-//                startActivity(i);
+
+                final EditText edittext = new EditText(getApplicationContext());
+                AlertDialog.Builder alert = new AlertDialog.Builder(Chat_board.this);
+                alert.setMessage("Enter the email");
+                alert.setTitle("Create new chat");
+
+                alert.setView(edittext);
+
+                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //What ever you want to do with the value
+                        Editable YouEditTextValue = edittext.getText();
+                        //OR
+                        String member = edittext.getText().toString();
+                        System.out.println(member);
+                        new CreateChatroomTask().execute(member);
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // what ever you want to do with No option.
+                    }
+                });
+
+                alert.show();
             }
         });
         listViewChatBoard = (ListView) findViewById(R.id.listViewChatrooms);
@@ -78,7 +104,11 @@ public class Chat_board extends AppCompatActivity {
                     String responseString = EntityUtils.toString(response.getEntity());
                     System.out.println(responseString);
                     JSONObject obj = new JSONObject(responseString);
-                    return obj.getString("chatroomid");
+                    if (obj.getString("result").equals("success")) {
+                        Intent intent = new Intent(Chat_board.this, Chat.class);
+                        intent.putExtra("chatroomid", obj.getString("chatroomid"));
+                        startActivity(intent);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
