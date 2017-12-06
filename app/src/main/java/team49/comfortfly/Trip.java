@@ -1,5 +1,8 @@
 package team49.comfortfly;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Trip {
     String fsid;
     String Origin;
@@ -13,6 +16,7 @@ public class Trip {
     String Duration;
     String Price;
     String Delay;
+    List<String> Companion;
 
     public Trip() {
         fsid = "";
@@ -27,6 +31,7 @@ public class Trip {
         Duration = "";
         Price = "";
         Delay = "";
+        Companion = new ArrayList<>();
     }
 
     @Override

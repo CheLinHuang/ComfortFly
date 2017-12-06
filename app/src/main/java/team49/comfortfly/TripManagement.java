@@ -128,6 +128,12 @@ public class TripManagement extends AppCompatActivity {
                         trip.ArrivalTime = arrival_time.split(" ")[1];
                         trip.Duration = duration(depart_time, arrival_time);
                         list.add(trip);
+
+                        JSONArray list = arr.getJSONObject(i).getJSONArray("companion");
+                        Trip companionTrip = new Trip();
+                        for ( int j = 0; j < list.length(); j++) {
+                            companionTrip.Companion.add(list.getJSONObject(j).toString());
+                        }
                     }
                 }
             } catch (Exception e) {
