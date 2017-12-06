@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,10 +18,10 @@ import org.json.JSONObject;
 
 public class Home extends AppCompatActivity {
 
-    Button Search;
-    Button Show;
-    Button Setting;
-    Button Chat;
+    ImageButton Search;
+    ImageButton Show;
+    ImageButton Setting;
+    ImageButton Chat;
     public static String token;
 
     @Override
@@ -30,7 +31,7 @@ public class Home extends AppCompatActivity {
 
         new LoginTask().execute();
 
-        Search = (Button) findViewById(R.id.searchButton);
+        Search = (ImageButton) findViewById(R.id.searchButton);
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,7 +40,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        Show = (Button) findViewById(R.id.showButton);
+        Show = (ImageButton) findViewById(R.id.showButton);
         Show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,7 +49,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        Setting = (Button) findViewById(R.id.showSetting);
+        Setting = (ImageButton) findViewById(R.id.showSetting);
         Setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +58,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        Chat = (Button) findViewById(R.id.showChat);
+        Chat = (ImageButton) findViewById(R.id.showChat);
         Chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -3,44 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="@dimen/activity_margin"
     tools:context="team49.comfortfly.Home"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 
-    <Button
+    <ImageButton
         android:id="@+id/searchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:text="Search for Trip" />
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="67dp"
+        android:layout_weight="0.5"
+        app:srcCompat="@drawable/search"
+        android:layout_marginStart="19dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
-    <Button
+    <ImageButton
         android:id="@+id/showButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:text="Show Existing Trip" />
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="0.5"
+        app:srcCompat="@drawable/show_existing_trip"
+        android:layout_alignTop="@+id/searchButton"
+        android:layout_alignStart="@+id/showChat" />
 
-    <Button
+    <ImageButton
         android:id="@+id/showSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/showButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:text="Setting" />
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="50dp"
+        app:srcCompat="@drawable/settings"
+        android:layout_below="@+id/searchButton"
+        android:layout_alignStart="@+id/searchButton" />
 
-    <Button
+    <ImageButton
         android:id="@+id/showChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/showSetting"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:text="Chat" />
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="0.5"
+        app:srcCompat="@drawable/chat"
+        android:layout_alignTop="@+id/showSetting"
+        android:layout_toEndOf="@+id/showSetting"
+        android:layout_marginStart="22dp" />
 
 </RelativeLayout>
