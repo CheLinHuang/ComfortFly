@@ -21,16 +21,15 @@ import java.util.Calendar;
 
 public class FlightSearch extends AppCompatActivity {
 
+    private static final String TAG = "FlightSearch";
     String curDate;
     String OriginLatLng;
     String DestinationLatLng;
     String StartDate;
-//    String ReturnDate;
     CalendarView StartDateView;
     CalendarView ReturnDateView;
     Button Search;
     ListView listView;
-    private static final String TAG = "FlightSearch";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +50,6 @@ public class FlightSearch extends AppCompatActivity {
                 StartDate = String.valueOf(year) + '-' + String.valueOf(month + 1) + '-' + String.valueOf(d);
             }
         });
-
-//        ReturnDateView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-//
-//            @Override
-//            public void onSelectedDayChange(CalendarView view, int year, int month,
-//                                            int dayOfMonth) {
-//                int d = dayOfMonth;
-//                ReturnDate = String.valueOf(year) + '-' + String.valueOf(month + 1) + '-' + String.valueOf(d);
-//            }
-//        });
 
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setMessage("Missing information");
@@ -96,7 +85,6 @@ public class FlightSearch extends AppCompatActivity {
                     i.putExtra("originLatLng", (OriginLatLng.split("\\(")[1]).split("\\)")[0]);
                     i.putExtra("destinationLatLng", (DestinationLatLng.split("\\(")[1]).split("\\)")[0]);
                     i.putExtra("departDate", StartDate);
-//                    i.putExtra("returnDate", ReturnDate);
                     startActivity(i);
                 }
             }
@@ -129,7 +117,6 @@ public class FlightSearch extends AppCompatActivity {
         Destination.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
                 Log.i(TAG, "Place: " + place.getLatLng());
                 DestinationLatLng = place.getLatLng().toString();

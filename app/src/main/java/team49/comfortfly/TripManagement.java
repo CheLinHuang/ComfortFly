@@ -71,8 +71,8 @@ public class TripManagement extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        //list = new ArrayList<>();
-        //new GetTripsTask().execute();
+        list = new ArrayList<>();
+        new GetTripsTask().execute();
     }
 
     String duration(String time1, String time2) {
@@ -136,18 +136,21 @@ public class TripManagement extends AppCompatActivity {
                         String[] companionList = companionString.substring(1, companionString.length() - 1).split(",");
                         Trip companionTrip = new Trip();
                         for (int j = 0; j < companionList.length; j++) {
-                            String comp = companionList[j].substring(1, companionList[j].length() - 1);
-                            System.out.println(comp);
-                            companionTrip.Companion.add(comp);
-                            String url;
-                            if (Character.isDigit(comp.charAt(0))) {
-                                url = "http://icons.iconarchive.com/icons/iconarchive/red-orb-alphabet/72/Number-"
-                                        + comp.charAt(0) + "-icon.png";
-                            } else {
-                                url = "http://icons.iconarchive.com/icons/iconarchive/red-orb-alphabet/72/Letter-" +
-                                        comp.charAt(0) + "-icon.png";
+                            try {
+                                String comp = companionList[j].substring(1, companionList[j].length() - 1);
+                                companionTrip.Companion.add(comp);
+                                String url;
+                                if (Character.isDigit(comp.charAt(0))) {
+                                    url = "http://icons.iconarchive.com/icons/iconarchive/red-orb-alphabet/128/Number-"
+                                            + comp.charAt(0) + "-icon.png";
+                                } else {
+                                    url = "http://icons.iconarchive.com/icons/iconarchive/red-orb-alphabet/128/Letter-" +
+                                            comp.charAt(0) + "-icon.png";
+                                }
+                                companionTrip.CompanionPic.add(BitmapFactory.decodeStream((InputStream) new URL(url).getContent()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            companionTrip.CompanionPic.add(BitmapFactory.decodeStream((InputStream) new URL(url).getContent()));
                         }
                         list.add(companionTrip);
                     }
@@ -168,6 +171,9 @@ public class TripManagement extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Trip trip = (Trip) parent.getItemAtPosition(position);
+                    if (trip.Origin.equals("")) {
+                        return;
+                    }
                     Intent i = new Intent(TripManagement.this, UpdateItinerary.class);
                     i.putExtra("fsid", trip.fsid);
                     i.putExtra("origin", trip.Origin);
@@ -185,14 +191,17 @@ public class TripManagement extends AppCompatActivity {
             listViewTripManage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(
             ) {
                 @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                     final Trip trip = (Trip) parent.getItemAtPosition(position);
+                    if (trip.Origin.equals("")) {
+                        return true;
+                    }
                     final AlertDialog.Builder builder = new AlertDialog.Builder(TripManagement.this);
                     builder.setTitle("Alert");
                     builder.setMessage("Delete this trip?");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            new DeleteTripTask().execute(trip);
+                            new DeleteTripTask(position).execute(trip);
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -209,6 +218,11 @@ public class TripManagement extends AppCompatActivity {
     class DeleteTripTask extends AsyncTask<Trip, Void, Void> {
 
         Trip trip;
+        int index;
+
+        DeleteTripTask(int index) {
+            this.index = index;
+        }
 
         @Override
         protected Void doInBackground(Trip... params) {
@@ -233,7 +247,8 @@ public class TripManagement extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            list.remove(trip);
+            list.remove(index);
+            list.remove(index);
             adapter.notifyDataSetChanged();
         }
     }

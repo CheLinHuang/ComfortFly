@@ -9,22 +9,19 @@
         android:layout_height="50dp"
         android:layout_weight="0.5"
         android:background="@drawable/white_background" />
-    <!--android:layout_marginStart="19dp" />-->
+
     <ImageButton
         android:id="@+id/friend2"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_weight="0.5"
         android:background="@drawable/white_background" />
-    <!--app:srcCompat="@drawable/white"-->
-    <!--android:layout_marginStart="19dp" />-->
+
     <ImageButton
         android:id="@+id/friend3"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_weight="0.5"
         android:background="@drawable/white_background" />
-    <!--app:srcCompat="@drawable/white" />-->
-    <!--android:layout_marginStart="19dp"/>-->
 
 </LinearLayout>

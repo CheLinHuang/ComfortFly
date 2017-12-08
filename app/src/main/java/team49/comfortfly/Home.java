@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.apache.http.HttpResponse;
@@ -18,11 +17,12 @@ import org.json.JSONObject;
 
 public class Home extends AppCompatActivity {
 
+    public static String token;
+    public static String email = "456@uiuc.edu";  // or 123@uiuc.edu for demo
     ImageButton Search;
     ImageButton Show;
     ImageButton Setting;
     ImageButton Chat;
-    public static String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,6 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         new LoginTask().execute();
-        //new Register.UserRegisterTask().execute();
 
         Search = (ImageButton) findViewById(R.id.searchButton);
         Search.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +75,7 @@ public class Home extends AppCompatActivity {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httpget = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/account");
-                httpget.setEntity(new StringEntity("{\"action\":\"login\",\"email\":\"456@uiuc.edu\",\"password\":\"12345\"}"));
+                httpget.setEntity(new StringEntity("{\"action\":\"login\",\"email\":\"" + Home.email + "\",\"password\":\"12345\"}"));
                 HttpResponse response = httpclient.execute(httpget);
 
                 System.out.println(response.toString());

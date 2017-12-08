@@ -46,7 +46,8 @@ public class FlightSearchResult extends AppCompatActivity {
     String originLatLng;
     String destinationLatLng;
     String departDate;
-    String returnDate;
+    List<Trip> list;
+
 //    Double[] coefMonth = new Double[]{
 //            6.42437005e+07,  6.42437005e+07,  6.42437005e+07,  6.42437005e+07,
 //            6.42437005e+07,  6.42437005e+07,  1.05688103e+11,  -5.49463103e+10,
@@ -389,43 +390,28 @@ public class FlightSearchResult extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flight_search_result);
         resultListView = (ListView) findViewById(R.id.resultListView);
-
+        list = new ArrayList<>();
         Intent intent = getIntent();
         originLatLng = intent.getExtras().getString("originLatLng");
         destinationLatLng = intent.getExtras().getString("destinationLatLng");
         departDate = intent.getExtras().getString("departDate");
-
-        GoogleFlightSearch a = new GoogleFlightSearch();
-        a.execute();
+        new GoogleFlightSearch().execute();
     }
 
     class GoogleFlightSearch extends AsyncTask<Void, Boolean, Boolean> {
 
         private static final String APPLICATION_NAME = "MyFlightApplication";
-        /**
-         * Global instance of the JSON factory.
-         */
         private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-        /**
-         * @param args
-         */
-
         List<TripOption> tripResults;
-        StringBuilder sb = new StringBuilder();
-        /**
-         * Global instance of the HTTP transport.
-         */
         private HttpTransport httpTransport;
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
-
             String originAirport;
             String destinationAirport;
 
             try {
-
                 /* Get departure airport code */
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpGet httpget = new HttpGet("http://iatageo.com/getCode/" + originLatLng.split(",")[0] +
@@ -450,7 +436,6 @@ public class FlightSearchResult extends AppCompatActivity {
                     return false;
                 }
 
-                //httpTransport = GoogleNetHttpTransport.newTrustedTransport();
                 httpTransport = new ApacheHttpTransport();
 
                 SliceInput slice1 = new SliceInput();
@@ -459,15 +444,8 @@ public class FlightSearchResult extends AppCompatActivity {
                 slice1.setDestination(destinationAirport);
                 slice1.setDate(departDate);
 
-                /*SliceInput slice2 = new SliceInput();
-                slice2.setMaxStops(3);
-                slice2.setOrigin(destinationAirport);
-                slice2.setDestination(originAirport);
-                slice2.setDate(returnDate);*/
-
                 List<SliceInput> slices = new ArrayList<>();
                 slices.add(slice1);
-                //slices.add(slice2);
 
                 TripOptionsRequest request = new TripOptionsRequest();
                 request.setSolutions(20);
@@ -513,9 +491,6 @@ public class FlightSearchResult extends AppCompatActivity {
                             String departTime = leg.getDepartureTime();
                             String arrivalTime = leg.getArrivalTime();
 
-                            //trip.DepartureTime = departTime.substring(11, 16);
-                            //trip.ArrivalTime = arrivalTime.substring(11, 16);
-
                             trip.DepartureDate = departTime.substring(0, 10);
                             trip.ArrivalDate = arrivalTime.substring(0, 10);
                             trip.DepartureTime = departTime.substring(11, 16);
@@ -534,12 +509,6 @@ public class FlightSearchResult extends AppCompatActivity {
                             int idx = departTime.indexOf("T");
                             TimeSplit = departTime.substring(idx+1).split(":");
                             int minute = Integer.parseInt(TimeSplit[1].split("-")[0]) < 30 ? 0:1;
-                            System.out.println(TimeSplit[0]);
-                            System.out.println(minute);
-//                            departureDateSplit[1] //month
-//                            departureDateSplit[2] //date
-//                            delayTime += 2461*(coefMonth[Integer.parseInt(departureDateSplit[1]) -1]
-//                                    + coef);
                             perDelayTime += coef[Integer.parseInt(departureDateSplit[1]) -1];
                             perDelayTime += coef[12 + Integer.parseInt(departureDateSplit[2]) -1];
                             perDelayTime += coef[12 + 31 +
@@ -584,7 +553,6 @@ public class FlightSearchResult extends AppCompatActivity {
 
                     tripp.Duration = sb.toString();
                     tripp.Price = t.getPricing().get(0).getSaleTotal();
-                    // TODO
                     tripp.Delay = "Delay:" + String.valueOf(delayTime.intValue()) + "m";
 
                     result.add(tripp);
@@ -613,7 +581,6 @@ public class FlightSearchResult extends AppCompatActivity {
                                 position--;
                             }
 
-
                             final AlertDialog.Builder builder = new AlertDialog.Builder(FlightSearchResult.this);
                             builder.setTitle("");
                             builder.setMessage("Do you want to add this itinerary to your trips?");
@@ -630,7 +597,6 @@ public class FlightSearchResult extends AppCompatActivity {
 
                             builder.create().show();
                         }
-
                     }
                 });
 
@@ -654,15 +620,12 @@ public class FlightSearchResult extends AppCompatActivity {
         }
     }
 
-    List<Trip> list = new ArrayList<>();
-
     class SendNewItinerary extends AsyncTask<Trip, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Trip... params) {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/trip?token=" + Home.token);
-
 
             try {
 

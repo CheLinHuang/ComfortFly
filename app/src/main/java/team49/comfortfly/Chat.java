@@ -29,15 +29,14 @@ import java.util.TimeZone;
 
 public class Chat extends AppCompatActivity {
 
-    private String chatroomid;
-
     ListView lView;
     List<Message> chatList;
     Button mSubmitMsgButton;
+    ChatAdapter apt;
     EditText message_editText;
     SimpleDateFormat formatterChicago = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
+    private String chatroomid;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +45,9 @@ public class Chat extends AppCompatActivity {
         Intent intent = getIntent();
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         chatroomid = intent.getStringExtra("chatroomid");
+
+        System.out.println(chatroomid);
+
         chatList = new ArrayList<>();
         lView = (ListView) findViewById(R.id.groupChatListView);
 
@@ -67,21 +69,6 @@ public class Chat extends AppCompatActivity {
             }
         });
     }
-
-    public void setUpListView() {
-        ChatAdapter apt = new ChatAdapter(getApplicationContext(), chatList);
-        lView.setAdapter(apt);
-    }
-
-//    public void sortListViewByTime() {
-//        chatList = new ArrayList<>(chatList);
-//        Collections.sort(chatList, new Comparator<Message>() {
-//            @Override
-//            public int compare(Message lhs, Message rhs) {
-//                return lhs.getCreatedDate().compareTo(rhs.getCreatedDate());
-//            }
-//        });
-//    }
 
     class SendMsgTask extends AsyncTask<String, Void, Boolean> {
 
@@ -112,9 +99,7 @@ public class Chat extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (result) {
-                message_editText.setText("");
-            }
+            message_editText.setText("");
             new ChatDownloadTask().execute();
         }
     }
@@ -128,8 +113,6 @@ public class Chat extends AppCompatActivity {
             HttpPost httppost = new HttpPost("http://fa17-cs411-49.cs.illinois.edu/api/chatmessage?token=" + Home.token);
 
             try {
-
-
 
                 httppost.setEntity(new StringEntity("{\"action\":\"search\",\"chatroomid\":\"" + chatroomid + "\"" +
                         ",\"time_from\":\"" + formatter.format(new Date(System.currentTimeMillis() + Integer.MAX_VALUE)) + "\",\"number\":30}"));
@@ -162,14 +145,21 @@ public class Chat extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            setUpListView();
+            apt = new ChatAdapter(getApplicationContext(), chatList);
+            lView.setAdapter(apt);
             mSubmitMsgButton.setEnabled(true);
+            new WebSocketThread(chatList).start();
         }
     }
 
     class WebSocketThread extends Thread {
 
         WebSocketClient websocket;
+        List<Message> chatList;
+
+        WebSocketThread(List<Message> chatList) {
+            this.chatList = chatList;
+        }
 
         @Override
         public void run() {
@@ -183,9 +173,11 @@ public class Chat extends AppCompatActivity {
                     }
 
                     public void onMessage(String message) {
-                        String[] msg = message.split("|");
+                        String[] msg = message.split(",");
                         if (msg[1].equals(chatroomid)) {
-
+                            Message m = new Message(msg[2], msg[0], formatterChicago.format(new Date(System.currentTimeMillis())));
+                            chatList.add(m);
+                            apt.notifyDataSetChanged();
                         }
                         System.out.println("Got msg: " + message);
                     }
@@ -203,6 +195,11 @@ public class Chat extends AppCompatActivity {
 
                 // Establish WebSocket Connection
                 websocket.connect();
+
+                while (true) {
+                    Thread.sleep(100);
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
